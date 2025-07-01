@@ -5,52 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Style A/L Exam Countdown</title>
     <style>
+        /* Import SF Pro Display font for iOS-like typography */
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
         
+        /* Define CSS variables for consistent iOS color palette */
         :root {
-            --ios-primary: #007AFF;
-            --ios-secondary: #34C759;
-            --ios-dark: #1C1C1E;
-            --ios-light: #F2F2F7;
-            --ios-glass: rgba(242, 242, 247, 0.6);
-            --ios-text: rgba(28, 28, 30, 0.9);
-            --ios-label: rgba(28, 28, 30, 0.55);
+            --ios-primary: #007AFF; /* Apple Blue */
+            --ios-secondary: #34C759; /* Apple Green */
+            --ios-dark: #1C1C1E; /* Dark Gray (for Dynamic Island) */
+            --ios-light: #F2F2F7; /* Light Gray (background) */
+            --ios-glass: rgba(242, 242, 247, 0.6); /* Translucent background */
+            --ios-text: rgba(28, 28, 30, 0.9); /* Primary text color */
+            --ios-label: rgba(28, 28, 30, 0.55); /* Secondary label text color */
         }
         
+        /* Reset default browser margins and paddings */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        /* Body styling for full-page background and centering content */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-            background: linear-gradient(160deg, #F2F2F7, #E5E5EA);
+            background: linear-gradient(160deg, #F2F2F7, #E5E5EA); /* Subtle gradient background */
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Prevent scrollbars */
             color: var(--ios-text);
         }
         
+        /* Main container for the iOS-style card */
         .ios-container {
             position: relative;
             width: 90%;
             max-width: 380px;
             padding: 2rem 1.5rem;
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(180%); /* Glassmorphism effect */
+            -webkit-backdrop-filter: blur(30px) saturate(180%); /* Safari support */
             background-color: var(--ios-glass);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px; /* Rounded corners */
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Light border for depth */
             box-shadow: 
-                0 4px 30px rgba(0, 0, 0, 0.05),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+                0 4px 30px rgba(0, 0, 0, 0.05), /* Subtle outer shadow */
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.4); /* Inner highlight */
             z-index: 1;
-            overflow: hidden;
+            overflow: hidden; /* Hide overflowing elements like fluid animation */
         }
         
+        /* Styling for the dynamic island placeholder */
         .dynamic-island {
             position: absolute;
             top: 12px;
@@ -63,6 +69,7 @@
             z-index: 10;
         }
         
+        /* Main heading styling */
         h1 {
             text-align: center;
             margin: 1rem 0 1.5rem;
@@ -71,6 +78,7 @@
             color: var(--ios-text);
         }
         
+        /* Exam date text styling */
         .exam-date {
             text-align: center;
             margin-bottom: 2rem;
@@ -79,6 +87,7 @@
             font-weight: 400;
         }
         
+        /* Container for countdown items */
         .countdown {
             display: flex;
             justify-content: space-between;
@@ -86,14 +95,15 @@
             margin-bottom: 2rem;
         }
         
+        /* Individual countdown item styling (Days, Hours, Minutes, Seconds) */
         .countdown-item {
             position: relative;
-            flex: 1;
+            flex: 1; /* Distribute space evenly */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.7); /* Slightly opaque white background */
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 
@@ -104,6 +114,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
+        /* Colored top border for countdown items */
         .countdown-item::after {
             content: '';
             position: absolute;
@@ -114,15 +125,17 @@
             background: linear-gradient(90deg, var(--ios-primary), var(--ios-secondary));
         }
         
+        /* Styling for the numerical countdown value */
         .countdown-value {
             font-size: 2.2rem;
             font-weight: 600;
             color: var(--ios-text);
             line-height: 1;
             margin-bottom: 4px;
-            font-variant-numeric: tabular-nums;
+            font-variant-numeric: tabular-nums; /* Ensures numbers align vertically */
         }
         
+        /* Styling for the countdown labels (Days, Hours, etc.) */
         .countdown-label {
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -131,13 +144,14 @@
             font-weight: 500;
         }
         
+        /* Styling for the iOS-style button */
         .ios-button {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
             padding: 0.9rem;
-            background: linear-gradient(90deg, var(--ios-primary), var(--ios-secondary));
+            background: linear-gradient(90deg, var(--ios-primary), var(--ios-secondary)); /* Gradient background */
             border: none;
             border-radius: 12px;
             color: white;
@@ -148,10 +162,11 @@
             position: relative;
             overflow: hidden;
             box-shadow: 
-                0 2px 10px rgba(0, 122, 255, 0.2),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+                0 2px 10px rgba(0, 122, 255, 0.2), /* Subtle shadow */
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.2); /* Inner highlight */
         }
         
+        /* Hover effect for the button */
         .ios-button::after {
             content: '';
             position: absolute;
@@ -159,7 +174,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1); /* Light overlay on hover */
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -168,16 +183,19 @@
             opacity: 1;
         }
         
+        /* Active (click) effect for the button */
         .ios-button:active {
             transform: scale(0.98);
         }
         
+        /* Styling for button icons */
         .ios-button-icon {
             margin-right: 8px;
             width: 18px;
             height: 18px;
         }
         
+        /* Background fluid animation */
         .fluid-animation {
             position: absolute;
             top: 0;
@@ -186,14 +204,15 @@
             height: 100%;
             background: linear-gradient(
                 90deg,
-                rgba(0, 122, 255, 0.03),
-                rgba(52, 199, 89, 0.03)
+                rgba(0, 122, 255, 0.03), /* Very light blue */
+                rgba(52, 199, 89, 0.03) /* Very light green */
             );
-            z-index: -1;
-            animation: fluidMotion 15s infinite alternate;
+            z-index: -1; /* Behind other content */
+            animation: fluidMotion 15s infinite alternate; /* Animation */
             opacity: 0.5;
         }
         
+        /* Keyframes for the fluid background animation */
         @keyframes fluidMotion {
             0% {
                 transform: translate(-10%, -10%) scale(1.2) rotate(0deg);
@@ -206,6 +225,7 @@
             }
         }
         
+        /* Status bar styling (top of the container) */
         .status-bar {
             position: absolute;
             top: 0;
@@ -220,12 +240,7 @@
             z-index: 5;
         }
         
-        .status-bar-left {
-            display: flex;
-            gap: 4px;
-        }
-        
-        .status-bar-right {
+        .status-bar-left, .status-bar-right {
             display: flex;
             gap: 4px;
         }
@@ -235,36 +250,25 @@
             color: var(--ios-text);
         }
         
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
+        /* Styling for the "Powered by" text and logo */
+        .powered-by {
+            display: flex;
             align-items: center;
-            flex-direction: column;
-            color: white;
+            justify-content: center;
+            margin-top: 1.5rem; /* Space above the powered by section */
+            font-size: 0.85rem;
+            color: var(--ios-label); /* Use secondary text color */
+            font-weight: 500;
         }
         
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #007AFF;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+        .powered-by-logo {
+            height: 50px; /* Adjust logo size as needed */
+            margin-left: 6px; /* Space between text and logo */
+            /* If your logo is an SVG and you want it to inherit text color, uncomment below: */
+            /* filter: brightness(0.6); */ 
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+
+        /* Responsive adjustments for smaller screens */
         @media (max-width: 400px) {
             .countdown-value {
                 font-size: 1.8rem;
@@ -286,26 +290,31 @@
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Sending to Telegram...</p>
-    </div>
-
+    <!-- Main iOS-style container for the countdown -->
     <div class="ios-container" id="countdown-container">
+        <!-- Dynamic Island placeholder -->
         <div class="dynamic-island"></div>
+        
+        <!-- Status bar (time and date) -->
         <div class="status-bar">
             <div class="status-bar-left">
-                <span id="current-time">9:41 AM</span>
+                <span id="current-time"></span>
             </div>
             <div class="status-bar-right">
-                <span class="today-date" id="today-date">Jun 15, 2023</span>
+                <span class="today-date" id="today-date"></span>
             </div>
         </div>
+        
+        <!-- Fluid background animation -->
         <div class="fluid-animation"></div>
         
+        <!-- Main title -->
         <h1>A/L Exam Countdown</h1>
+        
+        <!-- Exam date display -->
         <p class="exam-date">November 10, 2025</p>
         
+        <!-- Countdown display section -->
         <div class="countdown">
             <div class="countdown-item">
                 <span class="countdown-value" id="days">00</span>
@@ -325,65 +334,74 @@
             </div>
         </div>
         
-        <button class="ios-button" id="send-to-telegram-btn">
+        <!-- Download button -->
+        <button class="ios-button" id="download-image-btn">
+            <!-- Download icon (SVG) - a simple arrow pointing down -->
             <svg class="ios-button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 16L7 11L8.41 9.58L12 13.17L15.59 9.58L17 11L12 16ZM12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4ZM12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C15.31 6 18 8.69 18 12C18 15.31 15.31 18 12 18Z" fill="white"/>
+                <path d="M19 9H15V3H9V9H5L12 16L19 9ZM11 11V5H13V11H14.17L12 13.17L9.83 11H11ZM5 18H19V20H5V18Z" fill="white"/>
             </svg>
-            Share to Telegram
+            Download Countdown
         </button>
+
+        <!-- "Powered by" text and logo -->
+        <div class="powered-by">
+            Powered by <img src="mndlogo.png" alt="Your Logo" class="powered-by-logo" onerror="this.onerror=null;this.src='https://placehold.co/80x20/CCCCCC/000000?text=LogoError';">
+        </div>
     </div>
 
+    <!-- html2canvas library for capturing screenshots -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
-        // Format today's date (e.g., "Jun 15, 2023")
+        // Function to format today's date (e.g., "Jul 1, 2025")
         function formatTodayDate(date) {
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             const month = months[date.getMonth()];
             const day = date.getDate();
             const year = date.getFullYear();
             return `${month} ${day}, ${year}`;
         }
         
-        // Update current time and date
+        // Function to update current time and date in the status bar
         function updateDateTime() {
             const now = new Date();
             
-            // Update time
+            // Format and update time
             let hours = now.getHours();
             const minutes = now.getMinutes();
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
+            hours = hours ? hours : 12; // The hour '0' should be '12'
             const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
             
             document.getElementById('current-time').textContent = timeString;
             
-            // Update date
+            // Format and update date
             document.getElementById('today-date').textContent = formatTodayDate(now);
         }
         
-        // Initialize countdown
+        // Function to calculate and update the countdown
         function updateCountdown() {
-            const examDate = new Date('November 10, 2025 00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = examDate - now;
+            const examDate = new Date('November 10, 2025 00:00:00').getTime(); // Target exam date
+            const now = new Date().getTime(); // Current time
+            const distance = examDate - now; // Time difference in milliseconds
             
-            // Time calculations
+            // Calculate days, hours, minutes, and seconds
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            // Display results
+            // Display the calculated values, padding with '0' for single digits
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
             
-            // If countdown is finished
+            // If the countdown has finished (distance is negative)
             if (distance < 0) {
-                clearInterval(countdownInterval);
+                clearInterval(countdownInterval); // Stop the countdown
+                // Set all values to '00'
                 document.getElementById('days').textContent = '00';
                 document.getElementById('hours').textContent = '00';
                 document.getElementById('minutes').textContent = '00';
@@ -391,62 +409,50 @@
             }
         }
         
-        // Send to Telegram
-        document.getElementById('send-to-telegram-btn').addEventListener('click', async function() {
-            const container = document.getElementById('countdown-container');
-            const loading = document.getElementById('loading');
+        // Event listener for the "Download" button
+        document.getElementById('download-image-btn').addEventListener('click', async function() {
+            const downloadButton = document.getElementById('download-image-btn');
+            const fullPageElement = document.body; 
             
-            // Show loading indicator
-            loading.style.display = 'flex';
-            
+            // Temporarily hide the download button
+            downloadButton.style.display = 'none';
+
             try {
-                // Capture the countdown as an image
-                const canvas = await html2canvas(container, {
-                    scale: 2,
-                    backgroundColor: null,
-                    logging: false,
-                    useCORS: true
+                // Capture the full page as an image using html2canvas
+                const canvas = await html2canvas(fullPageElement, {
+                    scale: 2, // Increase resolution for better image quality
+                    backgroundColor: null, // Transparent background (will show body background)
+                    logging: false, // Disable html2canvas logging
+                    useCORS: true // Attempt to use CORS for external images (if any)
                 });
                 
-                // Convert canvas to blob
-                canvas.toBlob(async (blob) => {
-                    try {
-                        // Create FormData to send the image
-                        const formData = new FormData();
-                        formData.append('photo', blob, 'countdown.png');
-                        
-                        // Replace with your Telegram bot API endpoint
-                        // This should be your backend endpoint that forwards to Telegram Bot API
-                        const TELEGRAM_BOT_API = '7120684246:AAFZxIfeiMzEnRRdAWA_hnk2x6FmVTAeQHE';
-                        
-                        // Send to your backend which will forward to Telegram
-                        const response = await fetch(TELEGRAM_BOT_API, {
-                            method: 'POST',
-                            body: formData
-                        });
-                        
-                        if (response.ok) {
-                            alert('Countdown sent to Telegram successfully!');
-                        } else {
-                            throw new Error('Failed to send to Telegram');
-                        }
-                    } catch (error) {
-                        console.error('Error sending to Telegram:', error);
-                        alert('Error sending to Telegram. Please try again.');
-                    } finally {
-                        loading.style.display = 'none';
-                    }
-                }, 'image/png');
+                // Create a temporary anchor (<a>) element
+                const link = document.createElement('a');
+                // Set the download attribute with a desired filename
+                link.download = 'al-exam-countdown-fullpage.png'; // Changed filename
+                // Set the href to the image data URL from the canvas
+                link.href = canvas.toDataURL('image/png');
+                
+                // Programmatically click the link to trigger the download
+                link.click();
+                
+                // Clean up the temporary link
+                link.remove();
+
             } catch (error) {
-                console.error('Error capturing image:', error);
-                alert('Error capturing image. Please try again.');
-                loading.style.display = 'none';
+                console.error('Error capturing or downloading image:', error);
+                // In a real application, you might show a user-friendly message here
+            } finally {
+                // Always show the download button again after the process
+                downloadButton.style.display = 'flex'; // Assuming it's a flex container
             }
         });
         
-        // Initialize
+        // Initial calls to set time, date, and countdown immediately
         updateDateTime();
         updateCountdown();
+        
+        // Set intervals to update time, date, and countdown every second
         setInterval(updateDateTime, 1000);
         const countdownInterval = setInterval(updateCountdown, 1000);
     </script>
