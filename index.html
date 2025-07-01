@@ -1,13 +1,454 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Image to PDF Converter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Style A/L Exam Countdown</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --ios-primary: #007AFF;
+            --ios-secondary: #34C759;
+            --ios-dark: #1C1C1E;
+            --ios-light: #F2F2F7;
+            --ios-glass: rgba(242, 242, 247, 0.6);
+            --ios-text: rgba(28, 28, 30, 0.9);
+            --ios-label: rgba(28, 28, 30, 0.55);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: linear-gradient(160deg, #F2F2F7, #E5E5EA);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--ios-text);
+        }
+        
+        .ios-container {
+            position: relative;
+            width: 90%;
+            max-width: 380px;
+            padding: 2rem 1.5rem;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            background-color: var(--ios-glass);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 36px;
+            background-color: var(--ios-dark);
+            border-radius: 18px;
+            z-index: 10;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 1rem 0 1.5rem;
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--ios-text);
+        }
+        
+        .exam-date {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--ios-label);
+            font-weight: 400;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+        
+        .countdown-item {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.03),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+            padding: 1.2rem 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .countdown-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ios-primary), var(--ios-secondary));
+        }
+        
+        .countdown-value {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--ios-text);
+            line-height: 1;
+            margin-bottom: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ios-label);
+            font-weight: 500;
+        }
+        
+        .ios-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(90deg, var(--ios-primary), var(--ios-secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 2px 10px rgba(0, 122, 255, 0.2),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .ios-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .ios-button:hover::after {
+            opacity: 1;
+        }
+        
+        .ios-button:active {
+            transform: scale(0.98);
+        }
+        
+        .ios-button-icon {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .fluid-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(0, 122, 255, 0.03),
+                rgba(52, 199, 89, 0.03)
+            );
+            z-index: -1;
+            animation: fluidMotion 15s infinite alternate;
+            opacity: 0.5;
+        }
+        
+        @keyframes fluidMotion {
+            0% {
+                transform: translate(-10%, -10%) scale(1.2) rotate(0deg);
+            }
+            50% {
+                transform: translate(10%, 10%) scale(1.3) rotate(10deg);
+            }
+            100% {
+                transform: translate(-10%, -10%) scale(1.2) rotate(0deg);
+            }
+        }
+        
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ios-text);
+            z-index: 5;
+        }
+        
+        .status-bar-left {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .status-bar-right {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .today-date {
+            font-weight: 500;
+            color: var(--ios-text);
+        }
+        
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #007AFF;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 400px) {
+            .countdown-value {
+                font-size: 1.8rem;
+            }
+            
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .status-bar {
+                font-size: 0.7rem;
+                padding: 12px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Image to PDF Converter</h1>
-    <form action="/convert" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept=".jpg, .jpeg, .png" required>
-        <input type="submit" value="Convert to PDF">
-    </form>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Sending to Telegram...</p>
+    </div>
+
+    <div class="ios-container" id="countdown-container">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+            <div class="status-bar-left">
+                <span id="current-time">9:41 AM</span>
+            </div>
+            <div class="status-bar-right">
+                <span class="today-date" id="today-date">Jun 15, 2023</span>
+            </div>
+        </div>
+        <div class="fluid-animation"></div>
+        
+        <h1>A/L Exam Countdown</h1>
+        <p class="exam-date">November 10, 2025</p>
+        
+        <div class="countdown">
+            <div class="countdown-item">
+                <span class="countdown-value" id="days">00</span>
+                <span class="countdown-label">Days</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="hours">00</span>
+                <span class="countdown-label">Hours</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="minutes">00</span>
+                <span class="countdown-label">Minutes</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="seconds">00</span>
+                <span class="countdown-label">Seconds</span>
+            </div>
+        </div>
+        
+        <button class="ios-button" id="send-to-telegram-btn">
+            <svg class="ios-button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 16L7 11L8.41 9.58L12 13.17L15.59 9.58L17 11L12 16ZM12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4ZM12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C15.31 6 18 8.69 18 12C18 15.31 15.31 18 12 18Z" fill="white"/>
+            </svg>
+            Share to Telegram
+        </button>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // Format today's date (e.g., "Jun 15, 2023")
+        function formatTodayDate(date) {
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const year = date.getFullYear();
+            return `${month} ${day}, ${year}`;
+        }
+        
+        // Update current time and date
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Update time
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const timeString = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+            
+            document.getElementById('current-time').textContent = timeString;
+            
+            // Update date
+            document.getElementById('today-date').textContent = formatTodayDate(now);
+        }
+        
+        // Initialize countdown
+        function updateCountdown() {
+            const examDate = new Date('November 10, 2025 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = examDate - now;
+            
+            // Time calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Display results
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // If countdown is finished
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+        
+        // Send to Telegram
+        document.getElementById('send-to-telegram-btn').addEventListener('click', async function() {
+            const container = document.getElementById('countdown-container');
+            const loading = document.getElementById('loading');
+            
+            // Show loading indicator
+            loading.style.display = 'flex';
+            
+            try {
+                // Capture the countdown as an image
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    backgroundColor: null,
+                    logging: false,
+                    useCORS: true
+                });
+                
+                // Convert canvas to blob
+                canvas.toBlob(async (blob) => {
+                    try {
+                        // Create FormData to send the image
+                        const formData = new FormData();
+                        formData.append('photo', blob, 'countdown.png');
+                        
+                        // Replace with your Telegram bot API endpoint
+                        // This should be your backend endpoint that forwards to Telegram Bot API
+                        const TELEGRAM_BOT_API = '7120684246:AAFZxIfeiMzEnRRdAWA_hnk2x6FmVTAeQHE';
+                        
+                        // Send to your backend which will forward to Telegram
+                        const response = await fetch(TELEGRAM_BOT_API, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        if (response.ok) {
+                            alert('Countdown sent to Telegram successfully!');
+                        } else {
+                            throw new Error('Failed to send to Telegram');
+                        }
+                    } catch (error) {
+                        console.error('Error sending to Telegram:', error);
+                        alert('Error sending to Telegram. Please try again.');
+                    } finally {
+                        loading.style.display = 'none';
+                    }
+                }, 'image/png');
+            } catch (error) {
+                console.error('Error capturing image:', error);
+                alert('Error capturing image. Please try again.');
+                loading.style.display = 'none';
+            }
+        });
+        
+        // Initialize
+        updateDateTime();
+        updateCountdown();
+        setInterval(updateDateTime, 1000);
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
